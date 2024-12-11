@@ -1,0 +1,25 @@
+http:
+  middlewares:
+    cors-headers:
+      headers:
+        accessControlAllowOrigin: "https://abdo.agency"
+        accessControlAllowMethods: "GET, OPTIONS, POST, PATCH, DELETE"
+        accessControlAllowHeaders: "Content-Type, Authorization, X-Requested-With"
+        addVaryHeader: true
+
+  routers:
+    drupal_api:
+      rule: "Host(`api.abdo.agency`)"
+      entryPoints: ["https"]
+      tls:
+        certResolver: "simple-resolver"
+      service: drupal_api
+      middlewares:
+        - cors-headers
+
+  services:
+    drupal_api:
+      loadBalancer:
+        servers:
+          - url: "http://drupal:80"
+

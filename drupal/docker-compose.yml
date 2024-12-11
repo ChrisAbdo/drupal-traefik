@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  drupal:
+    build: .
+    environment:
+      - DRUPAL_DB_HOST=db
+      - DRUPAL_DB_PORT=5432
+      - DRUPAL_DB_USER=drupal
+      - DRUPAL_DB_PASSWORD=drupal_password
+      - DRUPAL_DB_NAME=drupal
+    depends_on:
+      - db
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.drupal.rule=Host(`api.abdo.agency`)"
+      - "traefik.http.routers.drupal.entrypoints=https"
+      - "traefik.http.routers.drupal.tls=true"
+      - "traefik.http.routers.drupal.tls.certresolver=simple-resolver"
+      - "traefik.http.services.drupal.loadbalancer.server.port=80"
+    restart: unless-stopped
+
+  db:
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=drupal
+      - POSTGRES_USER=drupal
+      - POSTGRES_PASSWORD=drupal_password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - traefik
+    restart: unless-stopped
+
+volumes:
+  drupal-data:
+  db-data:
+
+networks:
+  traefik:
+    external: true
+

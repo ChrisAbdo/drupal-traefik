@@ -1,14 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>HTML 5 Boilerplate</title>
-    <link rel="stylesheet" href="css/style.css">
-  </head>
-  <body>
-	  <h1>mywebclass</h1>
-	<script src="js/index.js"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple API Fetch</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .article {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    .article h2 {
+      margin: 0 0 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Articles</h1>
+  <div id="app">Loading...</div>
+
+  <script>
+    const API_URL = 'https://api.abdo.agency/jsonapi/node/article';
+
+    fetch(API_URL)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        const app = document.getElementById('app');
+        app.innerHTML = ''; // Clear the loading text
+
+        if (data && data.data && Array.isArray(data.data)) {
+          data.data.forEach(article => {
+            const articleDiv = document.createElement('div');
+            articleDiv.className = 'article';
+
+            const title = article.attributes.title;
+            const body = article.attributes.body.value;
+
+            articleDiv.innerHTML = `
+              <h2>${title}</h2>
+              <p>${body}</p>
+            `;
+
+            app.appendChild(articleDiv);
+          });
+        } else {
+          app.textContent = 'No articles found.';
+        }
+      })
+      .catch(error => {
+        document.getElementById('app').textContent = `Error: ${error.message}`;
+      });
+  </script>
+</body>
+
 </html>
+

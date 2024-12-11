@@ -13,7 +13,11 @@ api:
 # providers: in our case that's what we proxy. 
 # at first we only need the Docker, 
 # here's how to proxy external services  
-providers: 
+providers:
+  file:
+    # dynamic file
+    filename: /traefik/dynamic_conf.yml
+    watch: true  
   docker: 
     # here's where you specify the network to add 
     # service to get it "picked up" by the traffic 

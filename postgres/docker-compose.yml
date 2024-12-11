@@ -1,20 +1,25 @@
 version: "3.8"
 
 services:
-  postgres:
+  db:
     build: .
-    container_name: postgres
+    container_name: drupal-db
     restart: always
     networks:
       - backend
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+      - POSTGRES_USER=drupal
+      - POSTGRES_PASSWORD=drupal
+      - POSTGRES_DB=drupal
     ports:
       - '5432:5432'
     volumes:
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/
+      - postgres_data:/var/lib/postgresql/data
+
 networks:
   backend:
-      external: true
+    external: true
+
+volumes:
+  postgres_data:

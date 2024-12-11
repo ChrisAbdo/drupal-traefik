@@ -1,0 +1,12 @@
+parameters:
+  http.response.debug_cacheability_headers: true
+  http.response.debug_cache_context_headers: true
+  http.response.debug_cache_tags_headers: true
+  cache.container_with_docker: true
+  cors.config:
+    enabled: true
+    allowedHeaders: ['Authorization', 'Content-Type', 'X-CSRF-Token']
+    allowedMethods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS']
+    allowedOrigins: ['https://abdo.agency'] # Replace '*' with 'https://your-frontend-site.com' for production
+    supportsCredentials: true
+
