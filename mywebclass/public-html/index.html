@@ -1,67 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simple API Fetch</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    .article {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 10px 0;
-    }
-    .article h2 {
-      margin: 0 0 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NJIT ALUMNI</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-  <h1>Articles</h1>
-  <div id="app">Loading...</div>
 
-  <script>
-    const API_URL = 'https://api.abdo.agency/jsonapi/node/article';
+<!-- Hero Wrapper: Nav + Hero -->
+<div class="hero-wrapper">
+    <!-- Navigation Bar -->
+    <div class="nav-container">
+        <div class="wrapper">
+            <nav>
+                <!-- Logo with Image -->
+                <div class="logo-container">
+                    <img src="images/carbon_finance.svg" alt="Logo" class="logo-img">
+                    <span class="logo-text">ALUMNI BLOG</span>
+                </div>
+                <!-- Navigation Links -->
+                <ul class="nav-items">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
 
-    fetch(API_URL)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        const app = document.getElementById('app');
-        app.innerHTML = ''; // Clear the loading text
+    <!-- Header Section -->
+    <div class="header-container">
+        <div class="wrapper">
+            <header>
+                <div class="hero-content">
+                    <!-- Updated h1 and p -->
+                    <h1>Reconnect with Minds that Inspired You</h1>
+                    <p>Join our platform to keep the connection you had with your favorite professors, friends, and more during your time in college!</p>
+                    <img src="images/graduates.png" alt="Graduates" class="hero-img">
+                    <a href="#" class="cta-button">CONNECT NOW</a>
+                </div>
+            </header>
+        </div>
+    </div>
+</div>
 
-        if (data && data.data && Array.isArray(data.data)) {
-          data.data.forEach(article => {
-            const articleDiv = document.createElement('div');
-            articleDiv.className = 'article';
+<!-- Trusted By Section -->
+<div class="trusted-container">
+    <div class="wrapper">
+        <h2 class="trusted-text">Trusted By</h2>
+        <div class="trusted-logos">
+            <img src="images/Group 9.png" alt="NJIT Logo">
+            <img src="images/Group 9.png" alt="NJIT Logo">
+        </div>
+    </div>
+</div>
 
-            const title = article.attributes.title;
-            const body = article.attributes.body.value;
+<!-- Blog Section -->
+<div class="blog-section">
+    <div class="wrapper">
+        <div class="blog-content">
+            <div class="blog-text">
+                <h2>View Blog Posts From Professors And Students</h2>
+                <p>Discover valuable insights and learnings shared by professors and students through our engaging blog platform.</p>
+                <a href="#" class="cta-button">GET STARTED</a>
+            </div>
+            <div class="blog-image">
+                <img src="images/image 6.png" alt="Blog Image">
+            </div>
+        </div>
+    </div>
+</div>
 
-            articleDiv.innerHTML = `
-              <h2>${title}</h2>
-              <p>${body}</p>
-            `;
+<!-- Footer Background Image -->
+<div class="footer-background">
+    <img src="images/card1bg (1).png" alt="Footer Background" class="footer-img">
+</div>
 
-            app.appendChild(articleDiv);
-          });
-        } else {
-          app.textContent = 'No articles found.';
-        }
-      })
-      .catch(error => {
-        document.getElementById('app').textContent = `Error: ${error.message}`;
-      });
-  </script>
 </body>
-
 </html>
-
