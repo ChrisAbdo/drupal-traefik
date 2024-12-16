@@ -210,3 +210,9 @@ header p {
         width: 40%;
     }
 }
+
+.nav-items a.active {
+    color: #ff5722; /* Example active color */
+    font-weight: bold;
+    /* Add any other styles you want for the active link */
+}
