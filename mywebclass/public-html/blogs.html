@@ -5,6 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blogs - NJIT ALUMNI</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Your existing styles */
+        body {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .card {
+            background-color: #2a2a2a;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(255, 255, 255, 0.1), 0 1px 2px 0 rgba(255, 255, 255, 0.06);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-body {
+            color: #d1d5db;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        #blog-list {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
 </head>
 <body>
 
@@ -27,34 +71,73 @@
         // URL of the JSON API from Drupal
         const apiURL = "https://api.abdo.agency/jsonapi/node/article";
 
+        // Function to fetch image URL based on file ID
+        async function fetchImageURL(fileId) {
+            const fileAPIURL = `https://api.abdo.agency/jsonapi/file/file/${fileId}`;
+            try {
+                const response = await fetch(fileAPIURL);
+                const fileData = await response.json();
+                // Assuming the file URI is in data.attributes.uri.url
+                // Adjust the path based on your Drupal configuration
+                return fileData.data.attributes.uri.url.startsWith('http') 
+                    ? fileData.data.attributes.uri.url 
+                    : `https://api.abdo.agency${fileData.data.attributes.uri.url}`;
+            } catch (error) {
+                console.error(`Error fetching image with ID ${fileId}:`, error);
+                return null;
+            }
+        }
+
         // Fetch the blog data
         fetch(apiURL)
             .then(response => response.json())  // Parse JSON response
-            .then(data => {
+            .then(async data => {  // Make the function async to use await
                 // Get the blog-list element where we will insert blog items
                 const blogList = document.getElementById("blog-list");
 
                 // Check if data exists and iterate over the articles
                 if (data.data && data.data.length > 0) {
                     // Loop through each article and add to the page
-                    data.data.forEach(article => {
+                    for (const article of data.data) {
                         // Create a new blog entry element
                         const blogItem = document.createElement("div");
-                        blogItem.classList.add("blog-item");
+                        blogItem.classList.add("card");
 
-                        // Insert the title and body into the new element
+                        // Create card content
+                        const cardContent = document.createElement("div");
+                        cardContent.classList.add("card-content");
+
+                        // Insert the title into the new element
                         const title = document.createElement("h2");
+                        title.classList.add("card-title");
                         title.textContent = article.attributes.title;
-                        blogItem.appendChild(title);
+                        cardContent.appendChild(title);
 
+                        // Insert the body into the new element
                         const body = document.createElement("p");
-                        // Assuming the body is in `article.attributes.body.value`
-                        body.innerHTML = article.attributes.body ? article.attributes.body.value : 'No content available';
-                        blogItem.appendChild(body);
+                        body.classList.add("card-body");
+                        body.innerHTML = article.attributes.body ? article.attributes.body.processed : 'No content available';
+                        cardContent.appendChild(body);
+
+                        // Append the card content to the card
+                        blogItem.appendChild(cardContent);
+
+                        // Fetch and insert the image if available
+                        const imageRelationship = article.relationships.field_image;
+                        if (imageRelationship && imageRelationship.data) {
+                            const imageId = imageRelationship.data.id;
+                            const imageURL = await fetchImageURL(imageId);
+                            if (imageURL) {
+                                const img = document.createElement("img");
+                                img.src = imageURL;
+                                img.alt = article.attributes.title || "Blog Image";
+                                blogItem.insertBefore(img, cardContent);  // Insert image above the content
+                            }
+                        }
 
                         // Append the new blog item to the blog-list container
                         blogList.appendChild(blogItem);
-                    });
+                    }
                 } else {
                     blogList.innerHTML = "<p>No blog articles available.</p>";
                 }
