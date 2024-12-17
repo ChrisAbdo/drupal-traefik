@@ -21,6 +21,48 @@
 
     <!-- Include the JavaScript to load the navbar -->
     <script src="js/loadNavbar.js"></script>
+
+    <script>
+        // URL of the JSON API from Drupal
+        const apiURL = "https://api.abdo.agency/jsonapi/node/article";
+
+        // Fetch the blog data
+        fetch(apiURL)
+            .then(response => response.json())  // Parse JSON response
+            .then(data => {
+                // Get the blog-list element where we will insert blog items
+                const blogList = document.getElementById("blog-list");
+
+                // Check if data exists and iterate over the articles
+                if (data.data && data.data.length > 0) {
+                    // Loop through each article and add to the page
+                    data.data.forEach(article => {
+                        // Create a new blog entry element
+                        const blogItem = document.createElement("div");
+                        blogItem.classList.add("blog-item");
+
+                        // Insert the title and body into the new element
+                        const title = document.createElement("h2");
+                        title.textContent = article.attributes.title;
+                        blogItem.appendChild(title);
+
+                        const body = document.createElement("p");
+                        body.textContent = article.attributes.body ? article.attributes.body.value : 'No content available';
+                        blogItem.appendChild(body);
+
+                        // Append the new blog item to the blog-list container
+                        blogList.appendChild(blogItem);
+                    });
+                } else {
+                    blogList.innerHTML = "<p>No blog articles available.</p>";
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching blog data:", error);
+                document.getElementById("blog-list").innerHTML = "<p>Failed to load blog posts.</p>";
+            });
+    </script>
+    
 </body>
 </html>
 
