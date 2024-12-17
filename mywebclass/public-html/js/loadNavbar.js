@@ -24,14 +24,14 @@ function setActiveNavLink() {
         case '':
             navId = 'nav-home';
             break;
-        case 'about.html':
-            navId = 'nav-about';
+        case 'register.html':
+            navId = 'nav-register';
             break;
         case 'blogs.html':
             navId = 'nav-blog';
             break;
-        case 'contact.html':
-            navId = 'nav-contact';
+        case 'login.html':
+            navId = 'nav-login';
             break;
         default:
             navId = '';
