@@ -15,7 +15,8 @@
     <div class="blog-page">
         <div class="wrapper">
             <h1>Our Blogs</h1>
-            <!-- Your blog content goes here -->
+            <!-- Blog List Container -->
+            <div id="blog-list"></div>
         </div>
     </div>
 
@@ -47,7 +48,8 @@
                         blogItem.appendChild(title);
 
                         const body = document.createElement("p");
-                        body.textContent = article.attributes.body ? article.attributes.body.value : 'No content available';
+                        // Assuming the body is in `article.attributes.body.value`
+                        body.innerHTML = article.attributes.body ? article.attributes.body.value : 'No content available';
                         blogItem.appendChild(body);
 
                         // Append the new blog item to the blog-list container
@@ -62,7 +64,7 @@
                 document.getElementById("blog-list").innerHTML = "<p>Failed to load blog posts.</p>";
             });
     </script>
-    
+
 </body>
 </html>
 
